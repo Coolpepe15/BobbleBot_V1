@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>bobble_pi</name>
+  <version>1.0.0</version>
+  <description>
+    Raspberry Pi 4 hardware bring-up for the BobbleBot self-balancing robot
+    on ROS 2 Jazzy / Ubuntu 24.04: MPU6050 IMU driver, L298N + JGY-370 motor
+    driver, and a Python port of the bobble_controllers cascade PID balance
+    controller.
+  </description>
+  <maintainer email="sharina22calsin@gmail.com">BobbleBot</maintainer>
+  <license>tbd</license>
+
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>bobble_interfaces</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>ament_index_python</depend>
+  <exec_depend>joy</exec_depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

@@ -1,0 +1,99 @@
+# BobbleBot Raspberry Pi 4 balance controller parameters.
+#
+# GPIO pin numbers below are BCM numbering (the numbers gpiozero/lgpio use),
+# NOT physical header pin numbers. Update every pin to match your actual
+# wiring before running on hardware. See the README wiring section.
+
+imu_node:
+  ros__parameters:
+    i2c_bus: 1
+    i2c_address: 104            # 0x68 (AD0 pin low/GND). Use 105 (0x69) if AD0 is tied high.
+    publish_rate_hz: 200.0
+    frame_id: "imu_link"
+    gyro_calibration_samples: 400
+
+balance_controller_node:
+  ros__parameters:
+    # --- Loop timing / safety ---
+    control_loop_frequency_hz: 100.0
+    starting_tilt_safety_limit_deg: 4.0
+    max_tilt_safety_limit_deg: 20.0
+    controller_effort_max: 0.4
+
+    # --- IMU axis calibration (see README "Calibrating the IMU axes") ---
+    complementary_filter_alpha: 0.98
+    accel_fall_axis: "x"        # accelerometer axis that grows as the robot tips over
+    accel_fall_sign: 1.0
+    accel_vertical_axis: "z"    # accelerometer axis that reads ~+1g when upright
+    accel_vertical_sign: 1.0
+    gyro_tilt_axis: "y"         # gyro axis measuring the fall/pitch rate
+    gyro_tilt_sign: 1.0
+    gyro_yaw_axis: "z"          # gyro axis measuring turn/yaw rate
+    gyro_yaw_sign: 1.0
+    tilt_offset_deg: 0.0        # fine trim once the robot balances but leans
+
+    # --- Signal filtering (matches bobble_sim_balance_control.yaml) ---
+    measured_tilt_filter_hz: 100.0
+    measured_tilt_dot_filter_hz: 100.0
+    measured_turn_rate_filter_hz: 50.0
+    left_wheel_velocity_filter_hz: 10.0
+    right_wheel_velocity_filter_hz: 10.0
+    desired_forward_velocity_filter_hz: 10.0
+    desired_turn_rate_filter_hz: 50.0
+
+    # --- Command scaling / limits ---
+    max_velocity_cmd: 0.5
+    max_turn_rate_cmd: 2.0
+    wheel_radius_m: 0.05
+    velocity_cmd_scale: 1.0
+    turn_cmd_scale: 1.0
+
+    # --- Velocity -> desired tilt cascade (only used if use_wheel_odometry: true) ---
+    velocity_control_kp: 0.125
+    velocity_control_kd: 0.05
+    velocity_control_deriv_filter_hz: 20.0
+    velocity_control_ki: 0.01
+    velocity_control_alpha_filter: 0.99
+    velocity_control_max_integral_output: 0.025
+    velocity_control_output_limit_deg: 8.5
+
+    # --- Tilt -> motor effort (the inner loop that actually balances) ---
+    tilt_control_kp: 2.5
+    tilt_control_kd: 0.5
+    tilt_control_alpha_filter: 0.05
+
+    # --- Turning rate -> heading effort ---
+    turning_control_kp: 0.25
+    turning_control_ki: 0.05
+    turning_control_kd: 0.0
+    turning_control_deriv_filter_hz: 50.0
+    turning_output_filter: 0.5
+
+    # --- Wheel odometry (JGY-370 encoders) ---
+    # Leave use_wheel_odometry false until you've wired and verified your
+    # encoders; the controller then drives from an open-loop tilt bias
+    # instead (still balances and drives, but won't hold a precise speed).
+    use_wheel_odometry: false
+    pulses_per_revolution: 780.0   # MEASURE this for your motor's gear ratio/encoder disc - do not trust this default
+    wheel_velocity_adjustment: 1.0
+    left_encoder_pin_a: -1
+    left_encoder_pin_b: -1
+    right_encoder_pin_a: -1
+    right_encoder_pin_b: -1
+    left_encoder_invert: false
+    right_encoder_invert: false
+
+    # --- Open-loop fallback (used when use_wheel_odometry: false) ---
+    open_loop_tilt_bias_scale: 0.05
+    open_loop_max_tilt_bias_deg: 6.0
+
+    # --- L298N motor driver pins (BCM numbering) ---
+    left_motor_in1_pin: 5
+    left_motor_in2_pin: 6
+    left_motor_pwm_pin: 12
+    left_motor_invert: false
+    right_motor_in1_pin: 20
+    right_motor_in2_pin: 21
+    right_motor_pwm_pin: 13
+    right_motor_invert: false
+    pwm_frequency_hz: 1000
