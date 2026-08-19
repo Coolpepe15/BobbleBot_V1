@@ -18,19 +18,19 @@ balance_controller_node:
     control_loop_frequency_hz: 100.0
     starting_tilt_safety_limit_deg: 4.0
     max_tilt_safety_limit_deg: 20.0
-    controller_effort_max: 0.4
+    controller_effort_max: 0.6
 
-    # --- IMU axis calibration (see README "Calibrating the IMU axes") ---
+    # --- IMU axis calibration (see README "Calibrating the IMU axes") IMPORTANTE PARA LA IMU Y SU ORIENTACION---
     complementary_filter_alpha: 0.98
-    accel_fall_axis: "x"        # accelerometer axis that grows as the robot tips over
+    accel_fall_axis: "y"        # accelerometer axis that grows as the robot tips over
     accel_fall_sign: 1.0
     accel_vertical_axis: "z"    # accelerometer axis that reads ~+1g when upright
-    accel_vertical_sign: 1.0
-    gyro_tilt_axis: "y"         # gyro axis measuring the fall/pitch rate
-    gyro_tilt_sign: 1.0
+    accel_vertical_sign: -1.0
+    gyro_tilt_axis: "x"         # gyro axis measuring the fall/pitch rate
+    gyro_tilt_sign: -1.0
     gyro_yaw_axis: "z"          # gyro axis measuring turn/yaw rate
-    gyro_yaw_sign: 1.0
-    tilt_offset_deg: 0.0        # fine trim once the robot balances but leans
+    gyro_yaw_sign: -1.0
+    tilt_offset_deg: -4.662139        # fine trim once the robot balances but leans
 
     # --- Signal filtering (matches bobble_sim_balance_control.yaml) ---
     measured_tilt_filter_hz: 100.0
@@ -57,7 +57,7 @@ balance_controller_node:
     velocity_control_max_integral_output: 0.025
     velocity_control_output_limit_deg: 8.5
 
-    # --- Tilt -> motor effort (the inner loop that actually balances) ---
+    # --- Tilt -> motor effort (the inner loop that actually balances) CONTROL KP PARA LA REETROALIMENTACION DEL ROBOT---
     tilt_control_kp: 2.5
     tilt_control_kd: 0.5
     tilt_control_alpha_filter: 0.05
@@ -88,12 +88,15 @@ balance_controller_node:
     open_loop_max_tilt_bias_deg: 6.0
 
     # --- L298N motor driver pins (BCM numbering) ---
-    left_motor_in1_pin: 5
-    left_motor_in2_pin: 6
+    # Matches the actual wiring confirmed working with the standalone
+    # motor_controller_node.py script (Motor A -> left, Motor B -> right;
+    # swap left/right below if the diagnostic test shows they're reversed).
+    left_motor_in1_pin: 24
+    left_motor_in2_pin: 25
     left_motor_pwm_pin: 12
     left_motor_invert: false
-    right_motor_in1_pin: 20
-    right_motor_in2_pin: 21
+    right_motor_in1_pin: 23
+    right_motor_in2_pin: 22
     right_motor_pwm_pin: 13
     right_motor_invert: false
     pwm_frequency_hz: 1000

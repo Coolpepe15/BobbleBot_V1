@@ -38,6 +38,13 @@ class DifferenceEquationFilter:
         for i, w in enumerate(output_weights):
             self._output_weights[i] = w
 
+    def reset(self):
+        """Zero the filter's memory. The integrator/derivative state lives in
+        these buffers, so anything that wants to drop accumulated history
+        (e.g. PidControl.reset) has to clear them here."""
+        self._input_buffer = [0.0] * MAX_FILTER_SIZE
+        self._output_buffer = [0.0] * MAX_FILTER_SIZE
+
     def filter(self, input_value):
         for i in range(self._num_in_weights, 0, -1):
             self._input_buffer[i] = self._input_buffer[i - 1]

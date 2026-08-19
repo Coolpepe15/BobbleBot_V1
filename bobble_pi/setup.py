@@ -29,6 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'imu_node = bobble_pi.imu_node:main',
+            'imu_calibrate = bobble_pi.imu_calibrate:main',
             'balance_controller_node = bobble_pi.balance_controller_node:main',
             'keyboard_control_node = bobble_pi.keyboard_control_node:main',
             'joystick_control_node = bobble_pi.joystick_control_node:main',

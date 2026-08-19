@@ -91,6 +91,12 @@ class PidControl:
     def reset(self):
         self.first_run = True
         self.error_sum = 0.0
+        # error_sum is only the anti-windup accumulator; the actual integral
+        # and derivative history lives inside the IIR filters, so clearing
+        # error_sum alone left windup in place across an IDLE -> BALANCE cycle.
+        self.integral_filter.reset()
+        self.derivative_filter.reset()
+        self.last_output = 0.0
 
     def get_output(self, desired, actual):
         self.setpoint = desired
