@@ -58,8 +58,8 @@ balance_controller_node:
     velocity_control_output_limit_deg: 8.5
 
     # --- Tilt -> motor effort (the inner loop that actually balances) CONTROL KP PARA LA REETROALIMENTACION DEL ROBOT---
-    tilt_control_kp: 2.5
-    tilt_control_kd: 0.5
+    tilt_control_kp: 3.2
+    tilt_control_kd: 0.7
     tilt_control_alpha_filter: 0.05
 
     # --- Turning rate -> heading effort ---
@@ -94,9 +94,9 @@ balance_controller_node:
     left_motor_in1_pin: 24
     left_motor_in2_pin: 25
     left_motor_pwm_pin: 12
-    left_motor_invert: false
+    left_motor_invert: true
     right_motor_in1_pin: 23
     right_motor_in2_pin: 22
     right_motor_pwm_pin: 13
-    right_motor_invert: false
+    right_motor_invert: true
     pwm_frequency_hz: 1000
