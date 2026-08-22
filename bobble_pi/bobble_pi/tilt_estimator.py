@@ -28,7 +28,20 @@ class ComplementaryFilter:
             self._initialized = True
             return self.angle
         gyro_estimate = self.angle + gyro_rate * dt
-        self.angle = self.alpha * gyro_estimate + (1.0 - self.alpha) * accel_angle
+        # accel_angle comes from atan2() and is always wrapped to (-pi, pi].
+        # gyro_estimate is an unwrapped running integral and can end up on the
+        # opposite side of the +-pi branch cut (e.g. gyro_estimate=+3.10 rad,
+        # accel_angle=-3.10 rad - physically 0.08 rad apart, numerically far
+        # apart). Blending them directly would pull the estimate toward the
+        # wrong side. Instead, blend the shortest wrapped angular error so the
+        # correction always moves toward the accelerometer along the short way
+        # around, then re-wrap the result so self.angle never drifts outside
+        # (-pi, pi] regardless of which direction the robot fell.
+        error = math.atan2(
+            math.sin(accel_angle - gyro_estimate), math.cos(accel_angle - gyro_estimate)
+        )
+        angle = gyro_estimate + (1.0 - self.alpha) * error
+        self.angle = math.atan2(math.sin(angle), math.cos(angle))
         return self.angle
 
     def reset(self, angle=0.0):
