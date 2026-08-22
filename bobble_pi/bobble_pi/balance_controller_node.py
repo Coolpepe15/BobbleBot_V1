@@ -320,7 +320,8 @@ class BalanceControllerNode(Node):
             yaw_rate = select_axis(gyro, p.gyro_yaw_axis, p.gyro_yaw_sign)
 
             raw_tilt = self._tilt_filter.update(accel_angle, tilt_rate, dt)
-            self.state.measured_tilt = raw_tilt - math.radians(p.tilt_offset_deg)
+            trimmed_tilt = raw_tilt - math.radians(p.tilt_offset_deg)
+            self.state.measured_tilt = math.atan2(math.sin(trimmed_tilt), math.cos(trimmed_tilt))
             self.state.measured_tilt_dot = tilt_rate
             self.state.measured_turn_rate = yaw_rate
             self._heading += yaw_rate * dt

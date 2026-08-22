@@ -18,7 +18,7 @@ balance_controller_node:
     control_loop_frequency_hz: 100.0
     starting_tilt_safety_limit_deg: 4.0
     max_tilt_safety_limit_deg: 20.0
-    controller_effort_max: 0.6
+    controller_effort_max: 1.0
 
     # --- IMU axis calibration (see README "Calibrating the IMU axes") IMPORTANTE PARA LA IMU Y SU ORIENTACION---
     complementary_filter_alpha: 0.98
@@ -58,8 +58,8 @@ balance_controller_node:
     velocity_control_output_limit_deg: 8.5
 
     # --- Tilt -> motor effort (the inner loop that actually balances) CONTROL KP PARA LA REETROALIMENTACION DEL ROBOT---
-    tilt_control_kp: 3.2
-    tilt_control_kd: 0.7
+    tilt_control_kp: 13.0
+    tilt_control_kd: 3.2
     tilt_control_alpha_filter: 0.05
 
     # --- Turning rate -> heading effort ---
@@ -94,9 +94,9 @@ balance_controller_node:
     left_motor_in1_pin: 24
     left_motor_in2_pin: 25
     left_motor_pwm_pin: 12
-    left_motor_invert: true
+    left_motor_invert: false
     right_motor_in1_pin: 23
     right_motor_in2_pin: 22
     right_motor_pwm_pin: 13
-    right_motor_invert: true
+    right_motor_invert: false
     pwm_frequency_hz: 1000
